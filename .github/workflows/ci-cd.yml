@@ -35,24 +35,8 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-  deploy-to-ec2:
-    name: Deploy to AWS EC2
-    needs: build-and-push
-    runs-on: ubuntu-latest
 
-    steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: ${{ secrets.EC2_SSH_PORT }}
-          script: |
-            echo "🚀 Deploying Magic Background Changer..."
-            sudo docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-            sudo docker stop magic-bg || true
-            sudo docker rm magic-bg || true
             sudo docker run -d --restart unless-stopped --name magic-bg -p 80:80 ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
             sudo docker ps -a
             echo "✅ Deployment Complete!"
+
