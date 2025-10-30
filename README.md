@@ -19,6 +19,3 @@ Pipeline stages:
    docker build -t magic-bg .
    docker run -d -p 8080:80 magic-bg
 
-
-   
-
